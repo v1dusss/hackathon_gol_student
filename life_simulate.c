@@ -17,5 +17,6 @@ typedef struct
 uint8_t *simulate_life(uint32_t grid_dim, start_coord_t *initial_points, uint32_t initial_point_count)
 {
   //TODO: Implement this function!
+  return 0;
 }
 
