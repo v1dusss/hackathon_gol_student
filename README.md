@@ -7,7 +7,7 @@ Welcome to the AnyDesk Hackathon 2025!
 1. Fork this repo and submit the link to your forked repo to the google form
 2. git clone your repo into the following folder: C:/Users/anydesk/hackathon_gol
 
-Now you have two options to build your project:
+Now you have two options to build your project from the Windows Terminal:
 
 3. Call build_debug.bat to make a debug build that you can step through in a debugger like raddbg
 
