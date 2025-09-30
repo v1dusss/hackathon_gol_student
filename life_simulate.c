@@ -23,39 +23,39 @@ typedef struct
   uint32_t y;
 } start_coord_t;
 
-void print_map(uint8_t *map, uint32_t grid_dim, bool first_map)
-{
-  int cell = 0;
+// void print_map(uint8_t *map, uint32_t grid_dim, bool first_map)
+// {
+//   int cell = 0;
 
-  int map_buffer;
-  if (!first_map) {
-    map_buffer = one_map_size;
-    OutputDebugStringA("map 1:\n");
-  } else {
-    map_buffer = 0;
-    OutputDebugStringA("map 0:\n");
-  }
+//   int map_buffer;
+//   if (!first_map) {
+//     map_buffer = one_map_size;
+//     OutputDebugStringA("map 1:\n");
+//   } else {
+//     map_buffer = 0;
+//     OutputDebugStringA("map 0:\n");
+//   }
 
 
-  for (int y = 0; y < grid_dim; y++) {
-    if (y == 0) {
-      for (int i = 0; i < grid_dim + 1; i++)
-        OutputDebugStringA("+");
-      OutputDebugStringA("\n+");
-    }
+//   for (int y = 0; y < grid_dim; y++) {
+//     if (y == 0) {
+//       for (int i = 0; i < grid_dim + 1; i++)
+//         OutputDebugStringA("+");
+//       OutputDebugStringA("\n+");
+//     }
 
-    for (int x = 0; x < grid_dim; x++) {
-      cell = (y * grid_dim + x) + map_buffer;
-      if (map[cell] == 1)
-        OutputDebugStringA("o");
-      else
-        OutputDebugStringA(" ");
-    }
-    OutputDebugStringA("+\n+");
-  }
-  for (int i = 0; i < grid_dim + 2; i++)
-    OutputDebugStringA("+");
-}
+//     for (int x = 0; x < grid_dim; x++) {
+//       cell = (y * grid_dim + x) + map_buffer;
+//       if (map[cell] == 1)
+//         OutputDebugStringA("o");
+//       else
+//         OutputDebugStringA(" ");
+//     }
+//     OutputDebugStringA("+\n+");
+//   }
+//   for (int i = 0; i < grid_dim + 2; i++)
+//     OutputDebugStringA("+");
+// }
 
 void clear_map(uint8_t *map, uint32_t grid_dim, bool first_map)
 {
@@ -73,7 +73,7 @@ void swap_maps(uint8_t *map, uint32_t grid_dim)
   for (int i = 0; i < one_map_size; i++) {
     map[i + one_map_size] = map[i];
   }
-  clear_map(map, grid_dim, true);
+  // clear_map(map, grid_dim, true);
 }
 
 // int get_alive_neighbors(start_coord_t *initial_points, uint32_t initial_point_count, int x, int y)
@@ -109,67 +109,39 @@ void swap_maps(uint8_t *map, uint32_t grid_dim)
 //   return count;
 // }
 
-int get_alive_neighbors_on_edge(uint8_t *map, uint8_t *map_old, uint32_t grid_dim, uint8_t cell, int x, int y)
-{
-  int count = 0;
+// int get_alive_neighbors_on_edge(uint8_t *map, uint8_t *map_old, uint32_t grid_dim, int x, int y)
+// {
+//   int count = 0;
+//   for (int dy = -1; dy < 2; dy++) {
+//     for (int dx = -1; dx < 2; dx++) {
+//       if (dx == 0 && dy == 0)
+//         continue;
+//         uint32_t neighbor_x = (x + dx + grid_dim) % grid_dim;
+//         uint32_t neighbor_y = (y + dy + grid_dim) % grid_dim;
 
-  (void)map;
+//         if (map_old[neighbor_y * grid_dim + neighbor_x] != 0)
+//           count++; 
+//     }
+//   }
+//   return count;
+// }
 
-  bool up = false;
-  bool down = false;
-  bool left = false;
-  bool right = false;
+// int get_alive_neighbors(uint8_t *map, uint8_t *map_old, uint32_t grid_dim, int x, int y)
+// {
+//   int count = 0;
+//   for (int dy = -1; dy < 2; dy++) {
+//     for (int dx = -1; dx < 2; dx++) {
+//       if (dx == 0 && dy == 0)
+//         continue;
+//         uint32_t neighbor_x = (x + dx);
+//         uint32_t neighbor_y = (y + dy);
 
-  if (y == 0) {
-    up = true;
-  } else if (y == grid_dim - 1) {
-    down = true;
-  }
-  if (x == 0) {
-    left = true;
-  } else if (x == grid_dim - 1) {
-    right = true;
-  }
-  
-  for (int dy = -1; dy < 2; dy++) {
-    for (int dx = -1; dx < 2; dx++) {
-      if (dx == 0 && dy == 0)
-        continue;
-      int neighbor = cell + (dy *grid_dim + dx);
-      if (dy == -1 && up == true)
-        neighbor += one_map_size;
-      if (dy == 1 && down == true)
-        neighbor -= one_map_size;
-
-      if (dx == -1 && left == true)
-        neighbor += grid_dim;
-      if (dx == +1 && right == true)
-        neighbor -= grid_dim;
-      if (map_old[neighbor] == 1)
-        count++;
-    }
-  }
-  return count;
-}
-
-int get_alive_neighbors(uint8_t *map, uint8_t *map_old, uint32_t grid_dim, uint8_t cell)
-{
-  int count = 0;
-
-  (void)map;
-  
-  for (int dy = -1; dy < 2; dy++) {
-    for (int dx = -1; dx < 2; dx++) {
-      if (dx == 0 && dy == 0)
-        continue;
-      int neighbor = cell + (dy *grid_dim + dx);
-
-      if (map_old[neighbor] == 1)
-        count++;
-    }
-  }
-  return count;
-}
+//         if (map_old[neighbor_y * grid_dim + neighbor_x] != 0)
+//           count++; 
+//     }
+//   }
+//   return count;
+// }
 
 uint8_t *simulate_life(uint32_t grid_dim, start_coord_t *initial_points, uint32_t initial_point_count)
 {
@@ -181,8 +153,8 @@ uint8_t *simulate_life(uint32_t grid_dim, start_coord_t *initial_points, uint32_
   if (first_run == true) {
     OutputDebugStringA("malloc it\n");
     map = (uint8_t *)calloc((one_map_size * 2), sizeof(uint8_t));
-    // clear_map(map, grid_dim, true);
-    // clear_map(map, grid_dim, false);
+    clear_map(map, grid_dim, true);
+    clear_map(map, grid_dim, false);
     first_run = false;
     for (int i = 0; i < initial_point_count; i++) {
       int y = initial_points[i].y;
@@ -222,15 +194,20 @@ uint8_t *simulate_life(uint32_t grid_dim, start_coord_t *initial_points, uint32_
     for (uint32_t x = 0; x < grid_dim; x++) {
       int cell = y * grid_dim + x;
       count = 0;
-      if (y == 0 || x == 0 || y == grid_dim - 1 || x == grid_dim - 1)
-        count = get_alive_neighbors_on_edge(map, map_old, grid_dim, cell, x, y);
-        // count = get_alive_neighbors_on_edge(map, map_old, grid_dim, cell);
-      else
-        count = get_alive_neighbors(map, map_old, grid_dim, cell);
+      for (int dy = -1; dy < 2; dy++) {
+        for (int dx = -1; dx < 2; dx++) {
+          if (dx == 0 && dy == 0)
+            continue;
+            uint32_t neighbor_x = (x + dx + grid_dim) % grid_dim;
+            uint32_t neighbor_y = (y + dy + grid_dim) % grid_dim;
+
+            count += map_old[neighbor_y * grid_dim + neighbor_x];
+        }
+      }
       if ((map_old[cell] == 1 && count == 2) || count == 3)
-        map[y*grid_dim + x] = 1;
+        map[cell] = 1;
       else
-        map[y*grid_dim + x] = 0;
+        map[cell] = 0;
     }
   }
 
