@@ -146,12 +146,12 @@ void swap_maps(uint8_t *map, uint32_t grid_dim)
 uint8_t *simulate_life(uint32_t grid_dim, start_coord_t *initial_points, uint32_t initial_point_count)
 {
   static uint8_t *map;
-    char buff[255];
+    // char buff[255];
   one_map_size = grid_dim * grid_dim;
   // snprintf(buff, 255, " one_map_size: %d\n", one_map_size);
   // OutputDebugStringA(buff);
   if (first_run == true) {
-    OutputDebugStringA("malloc it\n");
+    // OutputDebugStringA("malloc it\n");
     map = (uint8_t *)calloc((one_map_size * 2), sizeof(uint8_t));
     clear_map(map, grid_dim, true);
     clear_map(map, grid_dim, false);
@@ -188,26 +188,36 @@ uint8_t *simulate_life(uint32_t grid_dim, start_coord_t *initial_points, uint32_
   //   // map[(initial_points[i].y * grid_dim) + initial_points[i].x] = 1;
   // }
   // OutputDebugStringA("=======================\n");
+  bool found = false;
   uint8_t *map_old = &map[one_map_size];
   int count = 0;
   for (uint32_t y = 0; y < grid_dim; y++) {
     for (uint32_t x = 0; x < grid_dim; x++) {
       int cell = y * grid_dim + x;
-      count = 0;
-      for (int dy = -1; dy < 2; dy++) {
-        for (int dx = -1; dx < 2; dx++) {
-          if (dx == 0 && dy == 0)
-            continue;
-            uint32_t neighbor_x = (x + dx + grid_dim) % grid_dim;
-            uint32_t neighbor_y = (y + dy + grid_dim) % grid_dim;
+      if (!found && map_old[cell] != 0) {
+        continue;
+      } else if (!found && map_old[cell] == 0){
+        found = true;
+        y--;
+        x -= 2;
+        continue;
+      } else {
+        count = 0; 
+        for (int dy = -1; dy < 2; dy++) {
+          for (int dx = -1; dx < 2; dx++) {
+            if (dx == 0 && dy == 0)
+              continue;
+              uint32_t neighbor_x = (x + dx + grid_dim) % grid_dim;
+              uint32_t neighbor_y = (y + dy + grid_dim) % grid_dim;
 
-            count += map_old[neighbor_y * grid_dim + neighbor_x];
+              count += map_old[neighbor_y * grid_dim + neighbor_x];
+          }
         }
-      }
-      if ((map_old[cell] == 1 && count == 2) || count == 3)
-        map[cell] = 1;
-      else
-        map[cell] = 0;
+        if ((map_old[cell] == 1 && count == 2) || count == 3)
+          map[cell] = 1;
+        else
+          map[cell] = 0;
+    }
     }
   }
 
